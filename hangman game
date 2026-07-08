@@ -1,0 +1,172 @@
+import random
+
+# -----------------------------
+# CODEALPHA TASK 1 - HANGMAN GAME
+# -----------------------------
+
+WORDS = [
+    "python",
+    "computer",
+    "developer",
+    "network",
+    "program"
+]
+
+HANGMAN = [
+"""
+  +---+
+  |   |
+      |
+      |
+      |
+      |
+=========
+""",
+"""
+  +---+
+  |   |
+  O   |
+      |
+      |
+      |
+=========
+""",
+"""
+  +---+
+  |   |
+  O   |
+  |   |
+      |
+      |
+=========
+""",
+"""
+  +---+
+  |   |
+  O   |
+ /|   |
+      |
+      |
+=========
+""",
+"""
+  +---+
+  |   |
+  O   |
+ /|\\  |
+      |
+      |
+=========
+""",
+"""
+  +---+
+  |   |
+  O   |
+ /|\\  |
+ /    |
+      |
+=========
+""",
+"""
+  +---+
+  |   |
+  O   |
+ /|\\  |
+ / \\  |
+      |
+=========
+"""
+]
+
+MAX_WRONG = 6
+
+
+def display_word(word, guessed):
+    result = ""
+
+    for letter in word:
+        if letter in guessed:
+            result += letter + " "
+        else:
+            result += "_ "
+
+    return result
+
+
+def play_game():
+
+    word = random.choice(WORDS)
+
+    guessed_letters = []
+
+    wrong = 0
+
+    print("\n" + "=" * 45)
+    print("         WELCOME TO HANGMAN")
+    print("=" * 45)
+
+    while wrong < MAX_WRONG:
+
+        print(HANGMAN[wrong])
+
+        print("Word :", display_word(word, guessed_letters))
+
+        print("Wrong guesses left :", MAX_WRONG - wrong)
+
+        print("Guessed letters :", " ".join(guessed_letters))
+
+        guess = input("\nEnter one letter : ").lower().strip()
+
+        if len(guess) != 1:
+            print("Enter only ONE letter.")
+            continue
+
+        if not guess.isalpha():
+            print("Only alphabets are allowed.")
+            continue
+
+        if guess in guessed_letters:
+            print("You already guessed this letter.")
+            continue
+
+        guessed_letters.append(guess)
+
+        if guess in word:
+            print("Correct Guess!")
+
+            won = True
+
+            for ch in word:
+                if ch not in guessed_letters:
+                    won = False
+                    break
+
+            if won:
+                print("\nCongratulations!")
+                print("You guessed the word:", word)
+                return
+
+        else:
+            wrong += 1
+            print("Wrong Guess!")
+
+    print(HANGMAN[MAX_WRONG])
+    print("\nGame Over!")
+    print("Correct word was :", word)
+
+
+def main():
+
+    while True:
+
+        play_game()
+
+        choice = input("\nDo you want to play again? (Y/N): ").lower()
+
+        if choice != "y":
+            print("\nThank you for playing!")
+            break
+
+
+if __name__ == "__main__":
+    main()
